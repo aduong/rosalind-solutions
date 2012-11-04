@@ -1,4 +1,5 @@
 use common::sense;
+use List::Util 'reduce';
 # use Algorithm::Permute; # ;) but against the point
 
 my $n = <>;
@@ -31,10 +32,5 @@ sub permutation_iterator {
 }
 
 sub factorial {
-    my $n = shift;
-    my $x = 1;
-    while ($n > 0) {
-        $x *= $n--;
-    }
-    $x;
+    reduce { $a * $b } 1, 1..shift;
 }
