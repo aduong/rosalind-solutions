@@ -1,31 +1,28 @@
 use common::sense;
 
-use constant GUARD => [];
-
 my $set_size = <>;
 
-my @set     = (1)x$set_size;
-my @subset1 = (0)x$set_size;
-my @subset2 = (0)x$set_size;
-unshift @set,     GUARD;
-unshift @subset1, GUARD;
-unshift @subset2, GUARD;
+my @u  = (1)x($set_size+1);
+my @s1 = (0)x($set_size+1);
+my @s2 = (0)x($set_size+1);
 
-$subset1[$_] = 1 foreach split /, /, substr scalar(<>), 1, -2;
-$subset2[$_] = 1 foreach split /, /, substr scalar(<>), 1, -2;
+$u[0]     = 0; # our universe doesn't include 0 :(
 
-say_set(set_union(\@subset1, \@subset2));
-say_set(set_intersect(\@subset1, \@subset2));
-say_set(set_difference(\@subset1, \@subset2));
-say_set(set_difference(\@subset2, \@subset1));
-say_set(set_difference(\@set, \@subset1));
-say_set(set_difference(\@set, \@subset2));
+$s1[$_] = 1 foreach split /, /, substr scalar(<>), 1, -2;
+$s2[$_] = 1 foreach split /, /, substr scalar(<>), 1, -2;
+
+set_say(set_union(\@s1, \@s2));
+set_say(set_intersect(\@s1, \@s2));
+set_say(set_difference(\@s1, \@s2));
+set_say(set_difference(\@s2, \@s1));
+set_say(set_difference(\@u, \@s1));
+set_say(set_difference(\@u, \@s2));
 
 sub set_union {
     my @union = @{shift;};
 
     for my $set (@_) {
-        for my $i (1..$set_size) {
+        for my $i (0..$set_size) {
             $union[$i] = 1 if $set->[$i];
         }
     }
@@ -37,7 +34,7 @@ sub set_intersect {
     my @intersection = @{shift;};
 
     for my $set (@_) {
-        for my $i (1..$set_size) {
+        for my $i (0..$set_size) {
             $intersection[$i] = 0 unless $set->[$i];
         }
     }
@@ -49,7 +46,7 @@ sub set_difference {
     my @difference = @{shift;};
 
     for my $set (@_) {
-        for my $i (1..$set_size) {
+        for my $i (0..$set_size) {
             $difference[$i] = 0 if $set->[$i];
         }
     }
@@ -57,7 +54,7 @@ sub set_difference {
     \@difference;
 }
 
-sub say_set {
+sub set_say {
     my $set = shift;
 
     my @set;
