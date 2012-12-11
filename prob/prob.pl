@@ -1,9 +1,15 @@
 use common::sense;
+use List::Util qw(sum);
 
-my $line = <>;
-for my $gc (split /\s+/, $line) {
-    my $at = 1-$gc;
+my @seq = split //, scalar <>;
+pop @seq;
 
-    print(($at * $at + $gc * $gc)/2, ' ');
+for my $gc (split /\s+/, scalar <>) {
+    my $logGC = log($gc/2)/log(10);
+    my $logAT = log((1-$gc)/2)/log(10);
+
+    my $logprob = sum map { /^[AT]$/ ? $logAT : $logGC } @seq;
+    print $logprob, ' ';
 }
+
 print "\n";
